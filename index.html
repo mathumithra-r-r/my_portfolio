@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathumithra · portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      cursor: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #0c111a;
+      color: #d3dce9;
+      line-height: 1.5;
+      font-size: 15px;
+      position: relative;
+    }
+
+    /* custom cursor */
+    .custom-cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(100, 180, 255, 0.2);
+      backdrop-filter: blur(2px);
+      border: 2px solid #88b8e6;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+      box-shadow: 0 0 10px #40a0ff80;
+    }
+
+    .custom-cursor.hover {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border-color: #ffffff;
+      box-shadow: 0 0 20px #88b8e6;
+    }
+
+    /* progress bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4b8bb4, #88b8e6, #b0d4ff);
+      width: 0%;
+      z-index: 10000;
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px #40a0ff;
+    }
+
+    /* fade + reveal */
+    .fade-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 2rem;
+      margin: 1rem 2rem;
+      background: #131e2a;
+      border-radius: 40px;
+      border: 1px solid #253341;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+    }
+
+    .logo {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #e0ecff;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #cbd5e6;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      transition: 0.2s;
+      font-size: 0.9rem;
+      border: 1px solid transparent;
+    }
+
+    .nav-links a:hover {
+      background: #253547;
+      color: white;
+      border-color: #3e5569;
+    }
+
+    /* sections */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: #ebf3ff;
+      border-left: 5px solid #4b8bb4;
+      padding-left: 1.2rem;
+    }
+
+    /* layout with robot */
+    .section-flex {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .section-flex.even {
+      flex-direction: row-reverse;
+    }
+
+    .character-box {
+      flex: 0 0 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .character-svg {
+      width: 160px;
+      height: 160px;
+      filter: drop-shadow(0 12px 14px rgba(0,0,0,0.7));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* speech bubble */
+    .speech-bubble {
+      background: #1e2f3f;
+      padding: 0.7rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #4b8bb4;
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      color: #d0e6ff;
+      max-width: 220px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+      position: relative;
+      word-break: break-word;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 8px;
+      border-style: solid;
+      border-color: transparent transparent #1e2f3f transparent;
+    }
+
+    .content-box {
+      flex: 1 1 400px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* hero */
+    #home .hero-container {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      flex: 1 1 300px;
+    }
+
+    .hero-text h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #ebf3ff;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-text .highlight {
+      font-size: 2rem;
+      font-weight: 500;
+      color: #88b8e6;
+      margin-bottom: 1rem;
+      display: inline-block;
+      border-bottom: 3px solid #4b8bb4;
+      padding-bottom: 0.2rem;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #b6c9e3;
+      background: #16222e;
+      padding: 1.2rem 1.8rem;
+      border-radius: 28px;
+      border: 1px solid #2b3e52;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+      max-width: 550px;
+    }
+
+    .hero-image img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #4b8bb4;
+      box-shadow: 0 15px 30px -8px #1f3b4e;
+      transition: transform 0.3s ease, border-color 0.3s;
+    }
+
+    .hero-image img:hover {
+      transform: scale(1.02);
+      border-color: #88b8e6;
+    }
+
+    /* skills categories + progress bars */
+    .skills-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .skill-category {
+      flex: 1 1 250px;
+      background: #131e2a;
+      border-radius: 32px;
+      padding: 1.8rem 1.5rem;
+      border: 1px solid #2b3d4f;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+    }
+
+    .skill-category h3 {
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+      color: #b3d6ff;
+      border-bottom: 2px solid #4b8bb4;
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .skill-card {
+      background: #16232f;
+      border: 1px solid #2b3d4f;
+      border-radius: 20px;
+      padding: 1.2rem 0.5rem 0.8rem;
+      text-align: center;
+      font-weight: 500;
+      color: #d0e0f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .skill-card i {
+      font-size: 2rem;
+      color: #77a9d3;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 6px;
+      background: #1f313f;
+      border-radius: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4b8bb4, #88b8e6);
+      border-radius: 10px;
+      transition: width 1s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      background: #1d2e3f;
+      border-color: #6ba2cc;
+    }
+
+    /* projects, education, internship cards */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card, .edu-card, .intern-card {
+      background: #16232f;
+      border: 1px solid #2b3d4f;
+      border-radius: 28px;
+      padding: 1.8rem 1.5rem;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      border-left: 4px solid #4b8bb4;
+    }
+
+    .project-card:hover, .edu-card:hover, .intern-card:hover {
+      transform: translateY(-6px);
+      background: #1d2e3f;
+      border-color: #6ba2cc;
+    }
+
+    .project-card h3, .edu-card h3, .intern-card h3 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #e3efff;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card i, .edu-card i, .intern-card i {
+      font-size: 2rem;
+      color: #77a9d3;
+    }
+
+    .edu-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .edu-detail span {
+      background: #1f313f;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #3d556b;
+      color: #cbdbea;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .responsibilities {
+      list-style: none;
+      margin-top: 1.2rem;
+    }
+    .responsibilities li {
+      margin: 0.6rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #c0d3ea;
+    }
+    .responsibilities i {
+      font-size: 1rem;
+      color: #77a9d3;
+      width: 1.8rem;
+      text-align: center;
+    }
+
+    /* contact */
+    .contact {
+      text-align: center;
+      background: #0f1a23;
+      border-radius: 60px 60px 30px 30px;
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 3.5rem 2rem;
+      border: 1px solid #2b4052;
+    }
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      background: #16232f;
+      padding: 2rem 2.5rem;
+      border-radius: 48px;
+      border: 1px solid #2f445a;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #1f3140;
+      padding: 0.7rem 2rem;
+      border-radius: 40px;
+      border: 1px solid #3b5369;
+      transition: 0.2s;
+    }
+    .contact-item:hover {
+      background: #263b4d;
+      border-color: #6ba2cc;
+      transform: scale(1.02);
+    }
+    .contact-item i {
+      font-size: 1.5rem;
+      color: #88b8e6;
+      width: 2rem;
+    }
+    .contact-item a {
+      color: #d0e2ff;
+      text-decoration: none;
+    }
+
+    .foot-note {
+      text-align: center;
+      padding: 2rem;
+      color: #7b94ab;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      nav { flex-direction: column; margin: 1rem; padding: 1rem; }
+      h2 { font-size: 1.9rem; }
+      .section-flex { flex-direction: column !important; }
+      .hero-text h1 { font-size: 2.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="custom-cursor" id="customCursor"></div>
+
+  <nav>
+    <span class="logo">✧ Mathumithra</span>
+    <ul class="nav-links">
+      <li><a href="#home"><i class="fas fa-house"></i> Home</a></li>
+      <li><a href="#skills"><i class="fas fa-code"></i> Skills</a></li>
+      <li><a href="#projects"><i class="fas fa-cube"></i> Projects</a></li>
+      <li><a href="#education"><i class="fas fa-graduation-cap"></i> Education</a></li>
+      <li><a href="#internship"><i class="fas fa-briefcase"></i> Internship</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HOME : neat robot waving -->
+  <section id="home" class="fade-section">
+    <div class="section-flex">
+      <div class="character-box">
+        <svg class="character-svg" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="headGrad" x1="30%" y1="20%" x2="70%" y2="80%">
+              <stop offset="0%" stop-color="#b0e0ff"/><stop offset="100%" stop-color="#7ba5c0"/>
+            </linearGradient>
+            <radialGradient id="eyeGlow" cx="40%" cy="40%" r="50%">
+              <stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#88b8e6"/>
+            </radialGradient>
+          </defs>
+          <!-- antenna -->
+          <line x1="50" y1="15" x2="50" y2="22" stroke="#b0d0ff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="50" cy="12" r="4" fill="#f0f6ff" stroke="#88b8e6" stroke-width="1.5"/>
+          <!-- head -->
+          <circle cx="50" cy="35" r="18" fill="url(#headGrad)" stroke="#2d4b6e" stroke-width="2"/>
+          <!-- visor -->
+          <rect x="35" y="28" width="30" height="10" rx="5" fill="#1f3347" stroke="#4b8bb4" stroke-width="1.5"/>
+          <circle cx="42" cy="33" r="3" fill="#b0e6ff" filter="url(#glow)"/>
+          <circle cx="58" cy="33" r="3" fill="#b0e6ff"/>
+          <!-- body -->
+          <rect x="40" y="50" width="20" height="25" rx="6" fill="#a7b8d9" stroke="#5f73a1" stroke-width="2"/>
+          <!-- waving left arm -->
+          <line x1="30" y1="55" x2="10" y2="40" stroke="#a7b8d9" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="7" cy="37" r="4" fill="#a7b8d9" stroke="#5f73a1" stroke-width="1.5"/>
+          <!-- right arm relaxed -->
+          <line x1="70" y1="55" x2="90" y2="60" stroke="#a7b8d9" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="93" cy="61" r="4" fill="#a7b8d9" stroke="#5f73a1" stroke-width="1.5"/>
+          <!-- legs -->
+          <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5" stroke-linecap="round"/>
+          <line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
+        </svg>
+        <div class="speech-bubble">Hi, I'm your neat robot guide!</div>
+      </div>
+      <div class="content-box">
+        <div class="hero-container">
+          <div class="hero-text">
+            <h1>Hi, I'm Mathumithra</h1>
+            <div class="highlight">Java Developer</div>
+            <p>I develop efficient applications and enjoy solving real-world problems through code.</p>
+          </div>
+          <div class="hero-image">
+            <img src="/images/Mypic2.jpg" alt="Mathumithra profile">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS : robot pointing, progress bars animated -->
+  <section id="skills" class="fade-section">
+    <div class="section-flex even">
+      <div class="character-box">
+        <svg class="character-svg" viewBox="0 0 100 100">
+          <defs><linearGradient id="headGrad2" x1="30%" y1="20%" x2="70%" y2="80%"><stop offset="0%" stop-color="#b0e0ff"/><stop offset="100%" stop-color="#7ba5c0"/></linearGradient></defs>
+          <line x1="50" y1="15" x2="50" y2="22" stroke="#b0d0ff" stroke-width="3"/><circle cx="50" cy="12" r="4" fill="#f0f6ff" stroke="#88b8e6" stroke-width="1.5"/>
+          <circle cx="50" cy="35" r="18" fill="url(#headGrad2)" stroke="#2d4b6e" stroke-width="2"/>
+          <rect x="35" y="28" width="30" height="10" rx="5" fill="#1f3347" stroke="#4b8bb4" stroke-width="1.5"/>
+          <circle cx="42" cy="33" r="3" fill="#b0e6ff"/><circle cx="58" cy="33" r="3" fill="#b0e6ff"/>
+          <rect x="40" y="50" width="20" height="25" rx="6" fill="#a7b8d9" stroke="#5f73a1" stroke-width="2"/>
+          <!-- pointing right arm -->
+          <line x1="70" y1="55" x2="94" y2="35" stroke="#a7b8d9" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="97" cy="32" r="4" fill="#a7b8d9" stroke="#5f73a1" stroke-width="1.5"/>
+          <line x1="30" y1="55" x2="10" y2="70" stroke="#a7b8d9" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="7" cy="73" r="4" fill="#a7b8d9" stroke="#5f73a1"/>
+          <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
+          <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
+        </svg>
+        <div class="speech-bubble">Skills with progress bars — I keep improving!</div>
+      </div>
+      <div class="content-box">
+        <h2>core skills</h2>
+        <div class="skills-categories" id="skillsContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS : robot with laptop -->
+  <section id="projects" class="fade-section">
+    <div class="section-flex">
+      <div class="character-box">
+        <svg class="character-svg" viewBox="0 0 100 100">
+          <defs><linearGradient id="headGrad3" x1="30%" y1="20%" x2="70%" y2="80%"><stop offset="0%" stop-color="#b0e0ff"/><stop offset="100%" stop-color="#7ba5c0"/></linearGradient></defs>
+          <line x1="50" y1="15" x2="50" y2="22" stroke="#b0d0ff" stroke-width="3"/><circle cx="50" cy="12" r="4" fill="#f0f6ff" stroke="#88b8e6"/>
+          <circle cx="50" cy="35" r="18" fill="url(#headGrad3)" stroke="#2d4b6e" stroke-width="2"/>
+          <rect x="35" y="28" width="30" height="10" rx="5" fill="#1f3347" stroke="#4b8bb4" stroke-width="1.5"/>
+          <circle cx="42" cy="33" r="3" fill="#b0e6ff"/><circle cx="58" cy="33" r="3" fill="#b0e6ff"/>
+          <rect x="40" y="50" width="20" height="25" rx="6" fill="#a7b8d9" stroke="#5f73a1" stroke-width="2"/>
+          <!-- laptop -->
+          <rect x="25" y="75" width="50" height="18" rx="3" fill="#9fc7b1" stroke="#5b8c70" stroke-width="2"/>
+          <rect x="30" y="80" width="40" height="8" fill="#386656"/>
+          <line x1="30" y1="60" x2="30" y2="75" stroke="#a7b8d9" stroke-width="6"/><line x1="70" y1="60" x2="70" y2="75" stroke="#a7b8d9" stroke-width="6"/>
+          <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
+          <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
+        </svg>
+        <div class="speech-bubble">My recent projects.</div>
+      </div>
+      <div class="content-box">
+        <h2>featured projects</h2>
+        <div class="projects-grid" id="projectsContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION : robot with book -->
+  <section id="education" class="fade-section">
+    <div class="section-flex even">
+      <div class="character-box">
+        <svg class="character-svg" viewBox="0 0 100 100">
+          <defs><linearGradient id="headGrad4" x1="30%" y1="20%" x2="70%" y2="80%"><stop offset="0%" stop-color="#b0e0ff"/><stop offset="100%" stop-color="#7ba5c0"/></linearGradient></defs>
+          <line x1="50" y1="15" x2="50" y2="22" stroke="#b0d0ff" stroke-width="3"/><circle cx="50" cy="12" r="4" fill="#f0f6ff" stroke="#88b8e6"/>
+          <circle cx="50" cy="35" r="18" fill="url(#headGrad4)" stroke="#2d4b6e" stroke-width="2"/>
+          <rect x="35" y="28" width="30" height="10" rx="5" fill="#1f3347" stroke="#4b8bb4" stroke-width="1.5"/>
+          <circle cx="42" cy="33" r="3" fill="#b0e6ff"/><circle cx="58" cy="33" r="3" fill="#b0e6ff"/>
+          <rect x="40" y="50" width="20" height="25" rx="6" fill="#a7b8d9" stroke="#5f73a1" stroke-width="2"/>
+          <rect x="40" y="64" width="28" height="18" rx="2" fill="#e0e8f0" stroke="#4b8bb4" stroke-width="2"/>
+          <line x1="45" y1="70" x2="63" y2="70" stroke="#2d3f5e" stroke-width="1"/><line x1="45" y1="75" x2="63" y2="75" stroke="#2d3f5e" stroke-width="1"/>
+          <line x1="30" y1="60" x2="40" y2="70" stroke="#a7b8d9" stroke-width="6"/><line x1="70" y1="60" x2="62" y2="70" stroke="#a7b8d9" stroke-width="6"/>
+          <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
+          <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
+        </svg>
+        <div class="speech-bubble">Academic background.</div>
+      </div>
+      <div class="content-box">
+        <h2>education</h2>
+        <div id="educationContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERNSHIP : robot typing -->
+  <section id="internship" class="fade-section">
+    <div class="section-flex">
+      <div class="character-box">
+        <svg class="character-svg" viewBox="0 0 100 100">
+          <defs><linearGradient id="headGrad5" x1="30%" y1="20%" x2="70%" y2="80%"><stop offset="0%" stop-color="#b0e0ff"/><stop offset="100%" stop-color="#7ba5c0"/></linearGradient></defs>
+          <line x1="50" y1="15" x2="50" y2="22" stroke="#b0d0ff" stroke-width="3"/><circle cx="50" cy="12" r="4" fill="#f0f6ff" stroke="#88b8e6"/>
+          <circle cx="50" cy="35" r="18" fill="url(#headGrad5)" stroke="#2d4b6e" stroke-width="2"/>
+          <rect x="35" y="28" width="30" height="10" rx="5" fill="#1f3347" stroke="#4b8bb4" stroke-width="1.5"/>
+          <circle cx="42" cy="33" r="3" fill="#b0e6ff"/><circle cx="58" cy="33" r="3" fill="#b0e6ff"/>
+          <rect x="40" y="50" width="20" height="25" rx="6" fill="#a7b8d9" stroke="#5f73a1" stroke-width="2"/>
+          <rect x="25" y="75" width="50" height="18" rx="3" fill="#9fc7b1" stroke="#5b8c70" stroke-width="2"/>
+          <rect x="30" y="80" width="40" height="8" fill="#386656"/>
+          <line x1="30" y1="60" x2="30" y2="75" stroke="#a7b8d9" stroke-width="6"/><line x1="70" y1="60" x2="70" y2="75" stroke="#a7b8d9" stroke-width="6"/>
+          <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
+          <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
+        </svg>
+        <div class="speech-bubble">Internship experience.</div>
+      </div>
+      <div class="content-box">
+        <h2>internship</h2>
+        <div id="internshipContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT : robot waving both arms -->
+  <section id="contact" class="contact fade-section">
+    <div class="section-flex even">
+      <div class="character-box">
+        <svg class="character-svg" viewBox="0 0 100 100">
+          <defs><linearGradient id="headGrad6" x1="30%" y1="20%" x2="70%" y2="80%"><stop offset="0%" stop-color="#b0e0ff"/><stop offset="100%" stop-color="#7ba5c0"/></linearGradient></defs>
+          <line x1="50" y1="15" x2="50" y2="22" stroke="#b0d0ff" stroke-width="3"/><circle cx="50" cy="12" r="4" fill="#f0f6ff" stroke="#88b8e6"/>
+          <circle cx="50" cy="35" r="18" fill="url(#headGrad6)" stroke="#2d4b6e" stroke-width="2"/>
+          <rect x="35" y="28" width="30" height="10" rx="5" fill="#1f3347" stroke="#4b8bb4" stroke-width="1.5"/>
+          <circle cx="42" cy="33" r="3" fill="#b0e6ff"/><circle cx="58" cy="33" r="3" fill="#b0e6ff"/>
+          <rect x="40" y="50" width="20" height="25" rx="6" fill="#a7b8d9" stroke="#5f73a1" stroke-width="2"/>
+          <line x1="20" y1="55" x2="5" y2="40" stroke="#a7b8d9" stroke-width="6" stroke-linecap="round"/><circle cx="2" cy="37" r="4" fill="#a7b8d9" stroke="#5f73a1"/>
+          <line x1="80" y1="55" x2="95" y2="40" stroke="#a7b8d9" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="37" r="4" fill="#a7b8d9" stroke="#5f73a1"/>
+          <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
+          <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
+        </svg>
+        <div class="speech-bubble">Let's connect!</div>
+      </div>
+      <div class="content-box">
+        <h2>let’s connect</h2>
+        <div class="contact-info" id="contactContainer"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot-note">✦ neat robot • animated skills ✦</div>
+
+  <script>
+    (function() {
+      // ----- portfolio data -----
+      const frontendSkills = ["HTML", "CSS", "JavaScript"];
+      const backendSkills = ["Java", "Python", "MySQL"];
+      const percentMap = { 'HTML':90, 'CSS':85, 'JavaScript':80, 'Java':90, 'Python':85, 'MySQL':80 };
+
+      const projectsData = [
+        { title: "Tic Tac Toe Game", description: "Java + React based interactive game with win detection.", icon: "fa-chess-board" },
+        { title: "Portfolio Website", description: "Responsive personal portfolio with modern UI.", icon: "fa-laptop-code" },
+        { title: "Library Management", description: "Java + MySQL system with CRUD operations.", icon: "fa-book-open" }
+      ];
+
+      const educationData = {
+        degree: "B.E in Computer Science and Engineering",
+        institution: "Government College of Engineering, Salem",
+        duration: "2022 - 2026",
+        cgpa: "8.65/10"
+      };
+
+      const internshipData = [{
+        role: "Web Development Intern",
+        company: "Emglitz Technologies",
+        duration: "May 2025 - July 2025",
+        responsibilities: [ "Developed front-end features using React", "Integrated front-end with Java-based backend APIs", "Assisted in database operations using MySQL", "Collaborated using Git and Agile methodology" ]
+      }];
+
+      const contactData = { email: "mathumoorthy06@gmail.com", linkedin: "linkedin.com/in/mathumithra", location: "Erode, India" };
+
+      // ----- render skills with progress bars -----
+      function renderCategory(title, skillsArray) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'skill-category';
+        categoryDiv.innerHTML = `<h3>${title}</h3><div class="skills-grid"></div>`;
+        const grid = categoryDiv.querySelector('.skills-grid');
+        skillsArray.forEach(skill => {
+          const card = document.createElement('div');
+          card.className = 'skill-card';
+          let iconClass = 'fa-solid fa-code';
+          const s = skill.toLowerCase();
+          if (s === 'java') iconClass = 'fab fa-java';
+          else if (s === 'python') iconClass = 'fab fa-python';
+          else if (s === 'html') iconClass = 'fab fa-html5';
+          else if (s === 'css') iconClass = 'fab fa-css3-alt';
+          else if (s === 'javascript') iconClass = 'fab fa-js';
+          else if (s === 'mysql') iconClass = 'fas fa-database';
+          const percent = percentMap[skill] || 70;
+          card.innerHTML = `<i class="${iconClass}"></i><span>${skill}</span>
+            <div class="progress-container"><div class="progress-bar-fill" data-percent="${percent}" style="width:0%"></div></div>`;
+          grid.appendChild(card);
+        });
+        return categoryDiv;
+      }
+
+      const skillsContainer = document.getElementById('skillsContainer');
+      if (skillsContainer) {
+        skillsContainer.appendChild(renderCategory('Frontend', frontendSkills));
+        skillsContainer.appendChild(renderCategory('Backend', backendSkills));
+      }
+
+      // ----- projects, education, internship, contact (same as before) -----
+      const projectsContainer = document.getElementById('projectsContainer');
+      if (projectsContainer) {
+        projectsData.forEach(proj => {
+          const card = document.createElement('div');
+          card.className = 'project-card';
+          card.innerHTML = `<h3><i class="fas ${proj.icon || 'fa-diagram-project'}"></i> ${proj.title}</h3><p>${proj.description}</p>`;
+          projectsContainer.appendChild(card);
+        });
+      }
+
+      const eduContainer = document.getElementById('educationContainer');
+      if (eduContainer) {
+        eduContainer.innerHTML = `<div class="edu-card"><h3><i class="fas fa-university"></i> ${educationData.degree}</h3>
+          <div class="edu-detail"><span><i class="fas fa-building"></i> ${educationData.institution}</span>
+          <span><i class="fas fa-calendar-alt"></i> ${educationData.duration}</span>
+          <span><i class="fas fa-star"></i> CGPA: ${educationData.cgpa}</span></div></div>`;
+      }
+
+      const internContainer = document.getElementById('internshipContainer');
+      if (internContainer) {
+        let html = '';
+        internshipData.forEach(intern => {
+          html += `<div class="intern-card"><h3><i class="fas fa-laptop-code"></i> ${intern.role}</h3>
+            <div class="intern-detail"><p><i class="fas fa-building"></i> ${intern.company}</p>
+            <p><i class="fas fa-clock"></i> ${intern.duration}</p></div><ul class="responsibilities">`;
+          intern.responsibilities.forEach(r => html += `<li><i class="fas fa-check-circle"></i> ${r}</li>`);
+          html += `</ul></div>`;
+        });
+        internContainer.innerHTML = html;
+      }
+
+      const contactContainer = document.getElementById('contactContainer');
+      if (contactContainer) {
+        contactContainer.innerHTML = `
+          <div class="contact-item"><i class="fas fa-envelope"></i> ${contactData.email}</div>
+          <div class="contact-item"><i class="fab fa-linkedin"></i> <a href="https://${contactData.linkedin}" target="_blank">${contactData.linkedin}</a></div>
+          <div class="contact-item"><i class="fas fa-map-pin"></i> ${contactData.location}</div>`;
+      }
+
+      // ----- PROGRESS ANIMATION for skills (trigger once when skills section visible) -----
+      const skillsSection = document.getElementById('skills');
+      const progressBars = document.querySelectorAll('#skills .progress-bar-fill');
+      function fillProgressBars() {
+        progressBars.forEach(bar => {
+          const percent = bar.getAttribute('data-percent');
+          if (percent) bar.style.width = percent + '%';
+        });
+      }
+      if (skillsSection && progressBars.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              fillProgressBars();
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        observer.observe(skillsSection);
+      }
+
+      // ----- scroll progress, cursor, fade (unchanged) -----
+      const progressBar = document.getElementById('progressBar');
+      window.addEventListener('scroll', () => {
+        const winScroll = document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        progressBar.style.width = (winScroll / height) * 100 + '%';
+      });
+
+      const cursor = document.getElementById('customCursor');
+      document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+      const hoverables = document.querySelectorAll('a, button, .skill-card, .project-card, .edu-card, .intern-card, .contact-item, .character-svg');
+      hoverables.forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hover')); el.addEventListener('mouseleave', () => cursor.classList.remove('hover')); });
+      document.addEventListener('mouseleave', () => cursor.style.opacity = '0'); document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
+
+      const fadeElements = document.querySelectorAll('.fade-section');
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); fadeObserver.unobserve(entry.target); } });
+      }, { threshold: 0.2 });
+      fadeElements.forEach(el => fadeObserver.observe(el));
+    })();
+  </script>
+</body>
+</html>
