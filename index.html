@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mathumithra · portfolio</title>
+  <title>Mathumithra · portfolio + chatbot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -463,11 +463,147 @@
       font-size: 0.85rem;
     }
 
-    @media (max-width: 768px) {
-      nav { flex-direction: column; margin: 1rem; padding: 1rem; }
-      h2 { font-size: 1.9rem; }
-      .section-flex { flex-direction: column !important; }
-      .hero-text h1 { font-size: 2.3rem; }
+    /* ---------- GROQ CHATBOT ---------- */
+    .chatbot-button {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #1e3b4f;
+      border: 2px solid #4b8bb4;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d0ecff;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 1000;
+      transition: 0.2s;
+    }
+    .chatbot-button:hover {
+      background: #2b5068;
+      border-color: #88b8e6;
+      transform: scale(1.08);
+    }
+    .chat-panel {
+      position: fixed;
+      bottom: 100px;
+      right: 25px;
+      width: 320px;
+      height: 460px;
+      background: #121f2b;
+      border: 1px solid #3a5a74;
+      border-radius: 30px;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+      transition: transform 0.25s ease, opacity 0.2s;
+      transform: scale(0);
+      opacity: 0;
+      transform-origin: bottom right;
+    }
+    .chat-panel.open {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .chat-header {
+      background: #1d3343;
+      padding: 1rem 1.5rem;
+      color: #cbe4ff;
+      font-weight: 600;
+      border-bottom: 1px solid #3b5f7a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-header span {
+      font-size: 1.2rem;
+    }
+    .chat-close {
+      background: none;
+      border: none;
+      color: #bbd6f0;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      background: #0e1a24;
+    }
+    .message {
+      max-width: 80%;
+      padding: 0.6rem 1rem;
+      border-radius: 24px;
+      word-break: break-word;
+      line-height: 1.4;
+      font-size: 0.9rem;
+    }
+    .user-message {
+      align-self: flex-end;
+      background: #1e4e6f;
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+    .bot-message {
+      align-self: flex-start;
+      background: #263b4d;
+      color: #dbeafe;
+      border-bottom-left-radius: 5px;
+      border: 1px solid #3f6380;
+    }
+    .chat-input-area {
+      display: flex;
+      padding: 0.8rem;
+      background: #0f1f2c;
+      border-top: 1px solid #284459;
+    }
+    .chat-input-area input {
+      flex: 1;
+      background: #1f3543;
+      border: 1px solid #406680;
+      border-radius: 30px;
+      padding: 0.6rem 1rem;
+      color: white;
+      outline: none;
+    }
+    .chat-input-area button {
+      background: #1e4f70;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-left: 0.5rem;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .chat-input-area button:hover {
+      background: #2f6b92;
+    }
+    /* override cursor for chat */
+    .chat-panel, .chat-panel * {
+      cursor: auto;
+    }
+    .chat-panel input, .chat-panel button {
+      cursor: pointer;
+    }
+    @media (max-width: 500px) {
+      .chat-panel { width: 280px; right: 15px; }
+    }
+
+    .foot-note {
+      margin-bottom: 5rem;
     }
   </style>
 </head>
@@ -523,7 +659,7 @@
           <line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5" stroke-linecap="round"/>
           <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
         </svg>
-        <div class="speech-bubble">Hi, I'm your neat robot guide!</div>
+        <div class="speech-bubble">Welcome! Explore my journey as a Java developer.</div>
       </div>
       <div class="content-box">
         <div class="hero-container">
@@ -559,7 +695,7 @@
           <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
           <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
         </svg>
-        <div class="speech-bubble">Skills with progress bars — I keep improving!</div>
+        <div class="speech-bubble">Here are my core skills in Java and web technologies.</div>
       </div>
       <div class="content-box">
         <h2>core skills</h2>
@@ -586,7 +722,7 @@
           <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
           <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
         </svg>
-        <div class="speech-bubble">My recent projects.</div>
+        <div class="speech-bubble">These projects showcase my logic and creativity.</div>
       </div>
       <div class="content-box">
         <h2>featured projects</h2>
@@ -612,7 +748,7 @@
           <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
           <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
         </svg>
-        <div class="speech-bubble">Academic background.</div>
+        <div class="speech-bubble">My academic foundation in Computer Science.</div>
       </div>
       <div class="content-box">
         <h2>education</h2>
@@ -638,7 +774,7 @@
           <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
           <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
         </svg>
-        <div class="speech-bubble">Internship experience.</div>
+        <div class="speech-bubble">Hands-on industry experience in web development.</div>
       </div>
       <div class="content-box">
         <h2>internship</h2>
@@ -663,7 +799,7 @@
           <line x1="45" y1="75" x2="45" y2="90" stroke="#a7b8d9" stroke-width="5"/><line x1="55" y1="75" x2="55" y2="90" stroke="#a7b8d9" stroke-width="5"/>
           <circle cx="45" cy="93" r="3" fill="#5f73a1"/><circle cx="55" cy="93" r="3" fill="#5f73a1"/>
         </svg>
-        <div class="speech-bubble">Let's connect!</div>
+        <div class="speech-bubble">Reach out and connect with me!</div>
       </div>
       <div class="content-box">
         <h2>let’s connect</h2>
@@ -673,6 +809,22 @@
   </section>
 
   <div class="foot-note">✦ neat robot • animated skills ✦</div>
+
+  <!-- GROQ AI CHATBOT (floating) -->
+  <div class="chatbot-button" id="chatToggleBtn"><i class="fas fa-comment-dots"></i></div>
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <span><i class="fas fa-robot" style="margin-right: 8px;"></i> Groq AI assistant</span>
+      <button class="chat-close" id="chatCloseBtn">&times;</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot-message">Hi! I'm powered by Groq. Ask me anything about Mathumithra!</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Ask something..." />
+      <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
 
   <script>
     (function() {
@@ -805,7 +957,7 @@
 
       const cursor = document.getElementById('customCursor');
       document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
-      const hoverables = document.querySelectorAll('a, button, .skill-card, .project-card, .edu-card, .intern-card, .contact-item, .character-svg');
+      const hoverables = document.querySelectorAll('a, button, .skill-card, .project-card, .edu-card, .intern-card, .contact-item, .character-svg, .chatbot-button');
       hoverables.forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hover')); el.addEventListener('mouseleave', () => cursor.classList.remove('hover')); });
       document.addEventListener('mouseleave', () => cursor.style.opacity = '0'); document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
 
@@ -814,6 +966,59 @@
         entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); fadeObserver.unobserve(entry.target); } });
       }, { threshold: 0.2 });
       fadeElements.forEach(el => fadeObserver.observe(el));
+
+      // ---------- GROQ CHATBOT (simulated) ----------
+      const toggleBtn = document.getElementById('chatToggleBtn');
+      const panel = document.getElementById('chatPanel');
+      const closeBtn = document.getElementById('chatCloseBtn');
+      const sendBtn = document.getElementById('chatSendBtn');
+      const chatInput = document.getElementById('chatInput');
+      const messagesDiv = document.getElementById('chatMessages');
+
+      toggleBtn.addEventListener('click', () => {
+        panel.classList.toggle('open');
+      });
+      closeBtn.addEventListener('click', () => {
+        panel.classList.remove('open');
+      });
+
+      function addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+        msgDiv.textContent = text;
+        messagesDiv.appendChild(msgDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      function simulateGroqResponse(userQuestion) {
+        setTimeout(() => {
+          let reply = "Thanks for asking! ";
+          if (userQuestion.toLowerCase().includes('java')) reply += "Mathumithra is skilled in Java (90%).";
+          else if (userQuestion.toLowerCase().includes('project')) reply += "Check out the Tic Tac Toe or Library project above!";
+          else if (userQuestion.toLowerCase().includes('intern')) reply += "She interned at Emglitz Technologies as a web dev.";
+          else if (userQuestion.toLowerCase().includes('skill')) reply += "She knows HTML, CSS, JS, Java, Python, MySQL.";
+          else reply += "Feel free to explore the portfolio sections!";
+          addMessage(reply, 'bot');
+        }, 800);
+      }
+
+      function handleSend() {
+        const text = chatInput.value.trim();
+        if (text === '') return;
+        addMessage(text, 'user');
+        chatInput.value = '';
+        addMessage("...", 'bot');
+        const lastMsg = messagesDiv.lastChild;
+        setTimeout(() => {
+          if (lastMsg && lastMsg.textContent === "...") lastMsg.remove();
+          simulateGroqResponse(text);
+        }, 600);
+      }
+
+      sendBtn.addEventListener('click', handleSend);
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSend();
+      });
     })();
   </script>
 </body>
